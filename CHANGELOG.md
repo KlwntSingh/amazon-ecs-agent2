@@ -1,5 +1,15 @@
 # Changelog
 
+# 1.103.1
+* Feature - Implement IMDS scanner for task credential retrieval, in the shared library [#4945](https://github.com/aws/amazon-ecs-agent/pull/4945)
+* Feature - Add config/capability for IMDS-based task credential retrieval (disabled for now) [#4938](https://github.com/aws/amazon-ecs-agent/pull/4938)
+* Feature - Add IMDS credential scanner interface and capability constant for IMDS-based task credential retrieval [#4937](https://github.com/aws/amazon-ecs-agent/pull/4937)
+* Enhancement - Bump github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs from 1.47.3 to 1.65.0 in /agent [#4921](https://github.com/aws/amazon-ecs-agent/pull/4921)
+* Enhancement - Bump github.com/aws/aws-sdk-go-v2/service/s3 from 1.63.1 to 1.97.3 in /ecs-init [#4923](https://github.com/aws/amazon-ecs-agent/pull/4923)
+* Enhancement - Bump github.com/aws/aws-sdk-go-v2/service/s3 from 1.79.2 to 1.97.3 in /agent [#4924](https://github.com/aws/amazon-ecs-agent/pull/4924)
+* Enhancement - Bump go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp from 1.32.0 to 1.43.0 in /agent [#4926](https://github.com/aws/amazon-ecs-agent/pull/4926)
+* Enhancement - Truncate log values to make agent logs less verbose [#4940](https://github.com/aws/amazon-ecs-agent/pull/4940)
+
 # 1.103.0
 * Enhancement - Golang bump: 1.25.9 [#4935](https://github.com/aws/amazon-ecs-agent/pull/4935)
 * Enhancement - Use env variable to read user input when mounting FSx volumes [#4934](https://github.com/aws/amazon-ecs-agent/pull/4934)
