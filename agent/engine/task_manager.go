@@ -43,6 +43,7 @@ import (
 	"github.com/aws/amazon-ecs-agent/ecs-agent/eventstream"
 	"github.com/aws/amazon-ecs-agent/ecs-agent/logger"
 	"github.com/aws/amazon-ecs-agent/ecs-agent/logger/field"
+	"github.com/aws/amazon-ecs-agent/ecs-agent/utils"
 	"github.com/aws/amazon-ecs-agent/ecs-agent/utils/retry"
 	"github.com/aws/amazon-ecs-agent/ecs-agent/utils/ttime"
 )
@@ -1310,6 +1311,11 @@ func (mtask *managedTask) taskExecutionRoleCredentialsResolved(resource taskreso
 		return true
 	}
 
+	// If the task's desired status is stopped, no credentials are needed to transition resources.
+	if mtask.GetDesiredStatus().Terminal() {
+		return true
+	}
+
 	// Check if credentials are available
 	_, ok := mtask.credentialsManager.GetTaskCredentials(mtask.Task.GetExecutionCredentialsID())
 	return ok
@@ -1625,7 +1631,7 @@ func (mtask *managedTask) cleanupTask(taskStoppedDuration time.Duration) {
 	if taskExecutionCredentialsID != "" {
 		logger.Info("Cleaning up task's execution credentials", logger.Fields{
 			field.TaskID:        mtask.GetID(),
-			field.CredentialsID: taskExecutionCredentialsID,
+			field.CredentialsID: utils.TruncateString(taskExecutionCredentialsID, utils.CredentialsIDLogTruncationLen),
 		})
 		mtask.credentialsManager.RemoveCredentials(taskExecutionCredentialsID)
 	}

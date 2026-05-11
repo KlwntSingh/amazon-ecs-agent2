@@ -1,5 +1,28 @@
 # Changelog
 
+# 1.103.1
+* Feature - Implement IMDS scanner for task credential retrieval, in the shared library [#4945](https://github.com/aws/amazon-ecs-agent/pull/4945)
+* Feature - Add config/capability for IMDS-based task credential retrieval (disabled for now) [#4938](https://github.com/aws/amazon-ecs-agent/pull/4938)
+* Feature - Add IMDS credential scanner interface and capability constant for IMDS-based task credential retrieval [#4937](https://github.com/aws/amazon-ecs-agent/pull/4937)
+* Enhancement - Bump github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs from 1.47.3 to 1.65.0 in /agent [#4921](https://github.com/aws/amazon-ecs-agent/pull/4921)
+* Enhancement - Bump github.com/aws/aws-sdk-go-v2/service/s3 from 1.63.1 to 1.97.3 in /ecs-init [#4923](https://github.com/aws/amazon-ecs-agent/pull/4923)
+* Enhancement - Bump github.com/aws/aws-sdk-go-v2/service/s3 from 1.79.2 to 1.97.3 in /agent [#4924](https://github.com/aws/amazon-ecs-agent/pull/4924)
+* Enhancement - Bump go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp from 1.32.0 to 1.43.0 in /agent [#4926](https://github.com/aws/amazon-ecs-agent/pull/4926)
+* Enhancement - Truncate log values to make agent logs less verbose [#4940](https://github.com/aws/amazon-ecs-agent/pull/4940)
+
+# 1.103.0
+* Enhancement - Golang bump: 1.25.9 [#4935](https://github.com/aws/amazon-ecs-agent/pull/4935)
+* Enhancement - Use env variable to read user input when mounting FSx volumes [#4934](https://github.com/aws/amazon-ecs-agent/pull/4934)
+* Enhancement - Enhancement - Replace SSM Dualstack endpoint resolution logic with UseDualStackEndpoint [#4931](https://github.com/aws/amazon-ecs-agent/pull/4931)
+* Enhancement - Emit duration metrics for TACS connect/disconnect [#4928](https://github.com/aws/amazon-ecs-agent/pull/4928)
+* Enhancement - Bump github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream from 1.6.10 to 1.7.8 in /agent [#4922](https://github.com/aws/amazon-ecs-agent/pull/4922)
+* Enhancement - Bump github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream from 1.6.5 to 1.7.8 in /ecs-init [#4925](https://github.com/aws/amazon-ecs-agent/pull/4925)
+* Enhancement - Track and emit metric for disconnect time from ACS [#4920](https://github.com/aws/amazon-ecs-agent/pull/4920)
+* Enhancement - engine: skip execution role checks when task desired status is stopped [#4918](https://github.com/aws/amazon-ecs-agent/pull/4918)
+* Enhancement - Add NeuronDevices type and sysfs-based device discovery [#4919](https://github.com/aws/amazon-ecs-agent/pull/4919)
+* Bugfix - Fix release workflow branch handling and add GitHub App token [#4929](https://github.com/aws/amazon-ecs-agent/pull/4929)
+* Bugfix - fix(netlib): Conditionally add IPv6 subnet to IPAM config when IPv6 … [#4916](https://github.com/aws/amazon-ecs-agent/pull/4916)
+
 # 1.102.2
 * Enhancement - Update SSM exec agent version to 3.3.4108.0 [#4912](https://github.com/aws/amazon-ecs-agent/pull/4912)
 * Enhancement - Update Go version to 1.25.8 [#4894](https://github.com/aws/amazon-ecs-agent/pull/4894)
