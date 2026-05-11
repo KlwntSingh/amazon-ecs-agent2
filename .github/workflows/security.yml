@@ -22,4 +22,4 @@ jobs:
       - name: Run gosec on Windows files
         run: |
           go install github.com/securego/gosec/v2/cmd/gosec@latest
-          gosec -include=G204 -fmt=text ./agent/taskresource/fsxwindowsfileserver/...
+          find . -name '*windows*.go' -not -path '*/vendor/*' -not -name '*_test.go' | xargs gosec -include=G204
