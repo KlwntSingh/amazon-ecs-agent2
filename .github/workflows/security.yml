@@ -30,4 +30,6 @@ jobs:
           export GO111MODULE=auto
           go install github.com/securego/gosec/v2/cmd/gosec@latest
           cd $GITHUB_WORKSPACE/src/github.com/aws/amazon-ecs-agent
-          GOOS=windows gosec -include=G204 -exclude-generated ./agent/taskresource/fsxwindowsfileserver/...
+          export GOOS=windows
+          export GOARCH=amd64
+          gosec -include=G204 -exclude-generated ./agent/taskresource/fsxwindowsfileserver/...
