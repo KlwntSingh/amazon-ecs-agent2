@@ -1,0 +1,33 @@
+rules:
+  - id: command-injection-exec-variable
+    patterns:
+      - pattern-either:
+          - pattern: execCommand($CMD, $...ARGS)
+          - pattern: exec.Command($CMD, $...ARGS)
+          - pattern: exec.CommandContext($CTX, $CMD, $...ARGS)
+      - pattern-not: execCommand("...", "...")
+      - pattern-not: exec.Command("...", "...")
+      - pattern-not: exec.CommandContext($CTX, "...", "...")
+    message: >
+      Potential command injection: variable arguments passed to shell execution function.
+      Ensure all inputs are sanitized (e.g., strings.ReplaceAll on single quotes for PowerShell).
+    languages: [go]
+    severity: ERROR
+    metadata:
+      cwe: "CWE-78"
+      confidence: MEDIUM
+
+  - id: unsanitized-powershell-interpolation
+    patterns:
+      - pattern: fmt.Sprintf($FMT, ..., $VAR, ...)
+      - metavariable-regex:
+          metavariable: $FMT
+          regex: ".*powershell.*|.*PSCredential.*|.*RemotePath.*|.*New-Smb.*"
+    message: >
+      String interpolation into PowerShell command without sanitization.
+      Apply strings.ReplaceAll(input, "'", "''") before interpolation.
+    languages: [go]
+    severity: WARNING
+    metadata:
+      cwe: "CWE-78"
+      confidence: MEDIUM
