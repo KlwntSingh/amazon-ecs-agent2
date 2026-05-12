@@ -11,8 +11,17 @@ jobs:
           fetch-depth: 0
 
       - name: Run semgrep on new changes
-        env:
-          SEMGREP_RULES: .github/semgrep/rules.yml
         run: |
           pip install semgrep --quiet
-          semgrep --config $SEMGREP_RULES --baseline-commit $(git merge-base HEAD origin/master)
+          BASELINE=$(git merge-base HEAD origin/master 2>/dev/null || echo "")
+          BASELINE_FLAG=""
+          if [ -n "$BASELINE" ]; then
+            BASELINE_FLAG="--baseline-commit $BASELINE"
+          fi
+
+          # First pass: emit PR annotations for any findings
+          semgrep --config .github/semgrep/rules.yml $BASELINE_FLAG --json 2>/dev/null | \
+            jq -r '.results[] | "::warning file=\(.path),line=\(.start.line),endLine=\(.end.line)::[\(.check_id)] \(.extra.message)"' || true
+
+          # Second pass: fail the workflow if findings exist
+          semgrep --config .github/semgrep/rules.yml $BASELINE_FLAG --error
