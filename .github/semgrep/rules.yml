@@ -10,7 +10,8 @@ rules:
       - pattern-not: exec.CommandContext($CTX, "...", "...")
     message: >
       Potential command injection: variable arguments passed to shell execution function.
-      Ensure all inputs are sanitized (e.g., strings.ReplaceAll on single quotes for PowerShell).
+      Use environment variables to pass untrusted input to subprocesses instead of
+      interpolating into command strings. See https://github.com/aws/amazon-ecs-agent/commit/09f274e0157dcbc777c4bbb2e40b6c55ae6646ad
     languages: [go]
     severity: ERROR
     metadata:
@@ -25,7 +26,8 @@ rules:
           regex: ".*powershell.*|.*PSCredential.*|.*RemotePath.*|.*New-Smb.*"
     message: >
       String interpolation into PowerShell command without sanitization.
-      Apply strings.ReplaceAll(input, "'", "''") before interpolation.
+      Use environment variables to pass untrusted input to subprocesses instead of
+      interpolating into command strings. See https://github.com/aws/amazon-ecs-agent/commit/09f274e0157dcbc777c4bbb2e40b6c55ae6646ad
     languages: [go]
     severity: WARNING
     metadata:
