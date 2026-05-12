@@ -16,7 +16,8 @@ rules:
     severity: ERROR
     paths:
       include:
-        - '*windows*'
+        - '*_windows.go'
+        - '*_windows_*.go'
     metadata:
       cwe: "CWE-78"
       confidence: MEDIUM
@@ -35,7 +36,8 @@ rules:
     severity: WARNING
     paths:
       include:
-        - '*windows*'
+        - '*_windows.go'
+        - '*_windows_*.go'
     metadata:
       cwe: "CWE-78"
       confidence: MEDIUM
