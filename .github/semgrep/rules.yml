@@ -5,18 +5,6 @@ rules:
           - pattern: execCommand($CMD, $...ARGS)
           - pattern: exec.Command($CMD, $...ARGS)
           - pattern: exec.CommandContext($CTX, $CMD, $...ARGS)
-      - pattern-not: execCommand("...")
-      - pattern-not: execCommand("...", "...")
-      - pattern-not: execCommand("...", "...", "...")
-      - pattern-not: execCommand("...", "...", "...", "...")
-      - pattern-not: exec.Command("...")
-      - pattern-not: exec.Command("...", "...")
-      - pattern-not: exec.Command("...", "...", "...")
-      - pattern-not: exec.Command("...", "...", "...", "...")
-      - pattern-not: exec.CommandContext($CTX, "...")
-      - pattern-not: exec.CommandContext($CTX, "...", "...")
-      - pattern-not: exec.CommandContext($CTX, "...", "...", "...")
-      - pattern-not: exec.CommandContext($CTX, "...", "...", "...", "...")
     message: >
       Potential command injection: variable arguments passed to shell execution function.
       Use environment variables to pass untrusted input to subprocesses instead of
