@@ -2,19 +2,18 @@ name: "Security Scan"
 on: [pull_request]
 permissions:
   contents: read
-  pull-requests: write
 jobs:
   semgrep:
     name: Semgrep Security Scanner
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: Run semgrep on new changes
+      - name: Run semgrep
         run: |
-          pip install semgrep --quiet
+          pip install 'semgrep==1.97.0' --quiet
           BASE_BRANCH="${{ github.base_ref || github.event.repository.default_branch }}"
           BASELINE=$(git merge-base HEAD origin/$BASE_BRANCH 2>/dev/null || echo "")
           BASELINE_FLAG=""
@@ -22,24 +21,23 @@ jobs:
             BASELINE_FLAG="--baseline-commit $BASELINE"
           fi
 
-          # Emit PR annotations as warnings
-          semgrep --config .github/semgrep/rules.yml $BASELINE_FLAG --json 2>/dev/null | \
-            jq -r '.results[] | "::warning file=\(.path),line=\(.start.line),endLine=\(.end.line)::[\(.check_id)] \(.extra.message)"' || true
+          semgrep --config .github/semgrep/rules.yml $BASELINE_FLAG \
+                  --json --output "$RUNNER_TEMP/semgrep.json" \
+                  2> "$RUNNER_TEMP/semgrep.err" || {
+            echo "::error::semgrep failed"
+            cat "$RUNNER_TEMP/semgrep.err"
+            exit 1
+          }
 
-      - name: Comment on PR with findings
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Report findings
         run: |
-          BASE_BRANCH="${{ github.base_ref }}"
-          BASELINE=$(git merge-base HEAD origin/$BASE_BRANCH 2>/dev/null || echo "")
-          BASELINE_FLAG=""
-          if [ -n "$BASELINE" ]; then
-            BASELINE_FLAG="--baseline-commit $BASELINE"
-          fi
+          # Emit PR annotations as warnings
+          jq -r '.results[] | "::warning file=\(.path),line=\(.start.line),endLine=\(.end.line)::[\(.check_id)] \(.extra.message)"' \
+            "$RUNNER_TEMP/semgrep.json"
 
-          RESULTS=$(semgrep --config .github/semgrep/rules.yml $BASELINE_FLAG --json 2>/dev/null | jq '.results | length')
-          if [ "$RESULTS" -gt 0 ]; then
-            COMMENT=$(semgrep --config .github/semgrep/rules.yml $BASELINE_FLAG --json 2>/dev/null | \
-              jq -r '"## ⚠️ Security Scan Findings\n\n" + ([.results[] | "- **\(.check_id)** in `\(.path):\(.start.line)`\n  \(.extra.message)"] | join("\n"))')
-            echo "$COMMENT" | gh pr comment ${{ github.event.pull_request.number }} --body-file -
+          # Fail if any findings exist
+          ERRORS=$(jq '.results | length' "$RUNNER_TEMP/semgrep.json")
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "::error::semgrep found $ERRORS security finding(s). See annotations above."
+            exit 1
           fi
