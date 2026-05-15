@@ -14,10 +14,6 @@ rules:
       interpolating into command strings. See https://github.com/aws/amazon-ecs-agent/commit/09f274e0157dcbc777c4bbb2e40b6c55ae6646ad
     languages: [go]
     severity: ERROR
-    paths:
-      include:
-        - '*_windows.go'
-        - '*_windows_*.go'
     metadata:
       cwe: "CWE-78"
       confidence: MEDIUM
@@ -34,10 +30,6 @@ rules:
       interpolating into command strings. See https://github.com/aws/amazon-ecs-agent/commit/09f274e0157dcbc777c4bbb2e40b6c55ae6646ad
     languages: [go]
     severity: WARNING
-    paths:
-      include:
-        - '*_windows.go'
-        - '*_windows_*.go'
     metadata:
       cwe: "CWE-78"
       confidence: MEDIUM
