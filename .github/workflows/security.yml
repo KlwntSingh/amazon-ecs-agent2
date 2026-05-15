@@ -8,6 +8,7 @@ jobs:
     name: Gosec Security Scanner
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         goos: [linux, windows]
     steps:
